@@ -2,6 +2,11 @@
 hashtag-pull - v - 2018-01-10
 Pulls twitter, vine, and instagram posts with a certain hashtag.
 Lovingly coded by Jess Frazelle  - http://frazelledazzell.com/ 
+*/
+/*
+hashtag-pull - v - 2018-01-10
+Pulls twitter, vine, and instagram posts with a certain hashtag.
+Lovingly coded by Jess Frazelle  - http://frazelledazzell.com/
 */var data = "dubai";
 
 
@@ -45,17 +50,17 @@ function get_feed(){
 
 
 
-   console.log(data);
-	$.ajax({
-		url: "ajax-feed.php?hashtag="+data
-	}).done(function(feed_data) {
-		$('.container').empty().html(feed_data);
-	});
+    console.log(data);
+    $.ajax({
+        url: "ajax-feed.php?hashtag="+data
+    }).done(function(feed_data) {
+        $('.container').empty().html(feed_data);
+    });
 }
 
 
 $(document).ready(function(){
-	get_feed();
+    get_feed();
 
     $("button").click(function(){
         data =  $("#hashtag").val();
@@ -69,6 +74,6 @@ $(document).ready(function(){
 
 
     var refreshFeed = setInterval(function(){
-		get_feed();
-	}, 300000);
+        get_feed();
+    }, 300000);
 });
