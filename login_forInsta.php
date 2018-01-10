@@ -26,8 +26,6 @@ file_put_contents(__DIR__ . "/status.txt", "0");
 var_dump("we are here");
 
 
-
-
 //var_dump($_GET['file']);
 
 //we are redirected here from instagram, and with the redirection is the acc
@@ -52,9 +50,10 @@ $result = curl_exec($ch);
 curl_close($ch);
 $result2 = json_decode($result, true);
 
-var_dump($result2);
+
 $i=0;
 foreach($result2 as $output) {
+    var_dump($output);
 $i = $output['access_token'];
 
 }

@@ -25,7 +25,7 @@ function instagram_login(selection) {
     var popup = window.open('https://instagram.com/oauth/authorize/?client_id=' + instagramClientId + '&redirect_uri=' + instagramRedirectUri + '&response_type=code', '_blank', 'width=' + w, 'height=' + h);
 
     $.ajax({
-        url: '/login_status.php',
+        url: "login_status.php",
         success: function (response) {
             console.log("closing the insta window");
             popup.close();
