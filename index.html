@@ -12,11 +12,36 @@
 
 		<!-- styles -->
 		<link rel="stylesheet" href="css/hashtag-pull.min.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 		<script src="js/lib/modernizr-2.6.2.min.js"></script>
 	</head>
 	<body>
-    <h3>Twitter, Vine, &amp; Instagram Hashtag Feed</h3>
-    <p class="lead"><strong>#</strong>legendsofsummer</p>
+    <h3>Twitter and Instagram(not working yet) Hashtag Feed</h3>
+	<div class="row">
+
+		<div class="col-xs-6 col-sm-6 col-md-6">
+			<div>
+				<!-- <button class="btn login-btn" id="insta-login1" onclick="instagram_login(1); return false;">Log in</button> -->
+				<button class="btn login-btn" id="insta-login1" onclick="instagram_login(); return false;">
+					Log in to instagram
+				</button>
+			</div>
+
+		</div>
+		<div class="col-xs-6 col-sm-6 col-md-6">
+			 <div class="wrap">
+				<div class="search">
+					<input type="text" id="hashtag" class="searchTerm" placeholder="What are you looking for?">
+					<button type="submit" class="searchButton">
+						<i class="fa fa-search"></i>
+					</button>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+
     <p><a href="https://github.com/jessfraz/hashtag-pull" target="_blank">Fork on GitHub</a></p>
 		<div class="container"></div>
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>

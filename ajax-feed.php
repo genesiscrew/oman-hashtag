@@ -3,6 +3,11 @@
 include('config.php');
 require_once('lib/twitteroauth.php');
 
+if ($_GET["hashtag"]) {
+    $hashtag = $_GET["hashtag"];
+}
+
+
 function stripEmojis($text){
     $clean_text = "";
 
@@ -79,19 +84,44 @@ function shouldUpdate($db, $hashtag){
 }
 
 function updateTwitter($db, $twitter, $hashtag){
+
     $db_con = mysqli_connect($db['host'], $db['user'], $db['password'], $db['name']);
     $connection = new TwitterOAuth($twitter['consumer_key'], $twitter['consumer_secret'], $twitter['access_token'], $twitter['access_token_secret']);
-    $content['twitter'] = $connection->get(
-        "search/tweets", array(
-            'q' => '#'.$hashtag.' filter:images',
-            'since_id' => $twitter['last_id'],
-            'include_entities' => true,
-            'lang' => 'en',
-            'count' => 100
-        )
-    );
+    //$content = $connection->get('account/verify_credentials');
 
-    $content['vine'] = $connection->get(
+    if (!preg_match('/[^A-Za-z0-9]/', $hashtag)) // '/[^a-z\d]/i' should also work.
+    {
+        // string contains only english letters & digits
+        $content['twitter'] = $connection->get(
+            "search/tweets", array(
+                'q' => '#'.$hashtag.' filter:images',
+                'since_id' => $twitter['last_id'],
+                'include_entities' => true,
+                'lang' => 'en',
+                'count' => 1000,
+                'rpp' => 1000,
+            )
+        );
+    }
+
+    else {
+
+        $content['twitter'] = $connection->get(
+            "search/tweets", array(
+                'q' => '#'.$hashtag.' filter:images',
+                'since_id' => $twitter['last_id'],
+                'include_entities' => true,
+                'lang' => 'ar',
+                'count' => 1000,
+                'rpp' => 1000,
+            )
+        );
+
+    }
+
+
+
+   /* $content['vine'] = $connection->get(
         "search/tweets", array(
             'q' => '#'.$hashtag.' vine.co filter:links',
             'since_id' => $twitter['last_id'],
@@ -99,7 +129,7 @@ function updateTwitter($db, $twitter, $hashtag){
             'lang' => 'en',
             'count' => 100
         )
-    );
+    );*/
 
     foreach($content as $name => $media){
         if (isset($media->statuses)){
@@ -122,7 +152,7 @@ function updateTwitter($db, $twitter, $hashtag){
                         $is_tweet = true;
                         $media_url = $tweet->entities->media[0]->media_url;
                         $media_url_https = $tweet->entities->media[0]->media_url_https;
-                    } else if (strpos($tweet->entities->urls[0]->expanded_url,'vine.co') !== false && $name == 'vine' && !empty($tweet->entities->urls) && isset($tweet->entities->urls[0]->expanded_url)){
+                    } /* else if (strpos($tweet->entities->urls[0]->expanded_url,'vine.co') !== false && $name == 'vine' && !empty($tweet->entities->urls) && isset($tweet->entities->urls[0]->expanded_url)){
                         $is_vine = true;
                         $type = 'video';
                         $media_url = $tweet->entities->urls[0]->expanded_url;
@@ -131,7 +161,7 @@ function updateTwitter($db, $twitter, $hashtag){
                         $picture_cell = $dom->find("//meta[@property='twitter:image']", 'content');
                         $media_url = $picture_cell[0];
                         $media_url_https = $video_cell[0];
-                    }
+                    }*/
                     if ($is_tweet || $is_vine){
                         if (mysqli_query($db_con,
                             "insert into media (time_now, source_id, created_at, user_id, name, screen_name, user_location, text, media_url, media_url_https, source, type, hashtag, post_url) ".
@@ -201,7 +231,8 @@ function outputFeed($db, $hashtag){
     if (mysqli_num_rows($query) > 0) {
         while ($post = mysqli_fetch_assoc($query)) {
             if ($post['type'] == 'photo'){
-                $media = '<a href="' . $post['post_url'] . '"><img class="' . $post['source'] . '" src="' . $post['media_url'] . '" alt=""/></a>';
+               // $media = '<a href="' . $post['post_url'] . '"><img class="' . $post['source'] . '" src="' . $post['media_url'] . '" alt=""/></a>';
+                $media = '<a href="' . $post['post_url'] . '">' . $post['text'] . '</a>';
             } else if ($post['media_url_https']!='') {
                 $media = '<video width="100%" height="100%" controls poster="'. $post['media_url'] . '">
                     <source src="'. $post['media_url_https'] . '" type="video/mp4">
@@ -221,7 +252,7 @@ $shouldUpdate = shouldUpdate($db, $hashtag);
 
 if ($shouldUpdate !== false){
     $twitter['last_id'] = $shouldUpdate;
-    updateInstagram($db, $instagram, $hashtag);
+    //updateInstagram($db, $instagram, $hashtag);
     updateTwitter($db, $twitter, $hashtag);
 }
 
