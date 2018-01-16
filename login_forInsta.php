@@ -7,7 +7,7 @@
  */
 
 
-//error_reporting(0);
+error_reporting(0);
 
 
 // we create the directory where we will be adding all the files necessary for creation of the video
@@ -19,7 +19,7 @@
     mkdir(__DIR__ . "/gallery/" . $_GET['file'], 0777, true);
 }*/
 
-$fp = fopen( __DIR__ . "/status.txt", "a" );
+$fp = fopen( __DIR__ . "/status.txt", "w" );
 
 file_put_contents(__DIR__ . "/status.txt", "0");
 
@@ -36,7 +36,8 @@ $fields = array(
     'client_secret' => '8e6a8d1d20e94d62bc0608a4d506755b',
     'grant_type'    => 'authorization_code',
     'redirect_uri'  => 'http://localhost/twitter/hashtag-pull/login_forInsta.php',
-    'code'          => $_GET['code']
+    'code'          => $_GET['code'],
+    'scope' => 'public_content'
 );
 
 $url = 'https://api.instagram.com/oauth/access_token';
@@ -50,11 +51,14 @@ $result = curl_exec($ch);
 curl_close($ch);
 $result2 = json_decode($result, true);
 
-
+var_dump("total result");
+var_dump($result2);
 $i=0;
 foreach($result2 as $output) {
+    var_dump("result item");
     var_dump($output);
-$i = $output['access_token'];
+$i = $output;
+break;
 
 }
 //header($i);
@@ -62,10 +66,19 @@ $i = $output['access_token'];
 //var_dump("we have a problem");
 var_dump($i);
 
-$fp = fopen( __DIR__ . "/status.txt", "a" );
+$fp = fopen( __DIR__ . "/status.txt", "w" );
 
 fwrite( $fp, $i  );
 
 file_put_contents(__DIR__ . "/status.txt", "1");
+
+if (file_exists(__DIR__ . "/access.txt")) {
+    var_dump("deleted exisint one");
+    unlink(__DIR__ . "/access.txt");
+}
+
+$fp = fopen( __DIR__ . "/access.txt", "w" );
+
+file_put_contents(__DIR__ . "/access.txt", $i);
 
 //echo  "<div> You have logged in succesfully to your instagram account. If this window does not automatically close in 5 seconds, please close it and return to the bmw site.</div>"; //your tokenken; //your token

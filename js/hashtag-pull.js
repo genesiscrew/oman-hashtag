@@ -1,5 +1,5 @@
 /*
-hashtag-pull - v - 2018-01-10
+hashtag-pull - v - 2018-01-15
 Pulls twitter, vine, and instagram posts with a certain hashtag.
 Lovingly coded by Jess Frazelle  - http://frazelledazzell.com/ 
 */
@@ -60,9 +60,11 @@ function get_feed(){
 
 
 $(document).ready(function(){
-    get_feed();
+    //get_feed();
 
-    $("button").click(function(){
+    console.log("are we here ");
+
+    $("#taghash").click(function(){
         data =  $("#hashtag").val();
         $.ajax({
             url: "ajax-feed.php?hashtag="+data

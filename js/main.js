@@ -22,13 +22,13 @@ function instagram_login(selection) {
     }
 
 
-    var popup = window.open('https://instagram.com/oauth/authorize/?client_id=' + instagramClientId + '&redirect_uri=' + instagramRedirectUri + '&response_type=code', '_blank', 'width=' + w, 'height=' + h);
+    var popup = window.open('https://instagram.com/oauth/authorize/?client_id=' + instagramClientId + '&redirect_uri=' + instagramRedirectUri + '&response_type=token', '_blank', 'width=' + w, 'height=' + h);
 
     $.ajax({
         url: "login_status.php",
         success: function (response) {
             console.log("closing the insta window");
-            popup.close();
+           // popup.close();
             //removeFiles();
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {

@@ -23,6 +23,6 @@ $db = array(
     'name' =>       'hashtag_pull'
 );
 
-$hashtag = 'dubai';
+$hashtag = '';
 
 ?>

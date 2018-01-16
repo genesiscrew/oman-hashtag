@@ -31,6 +31,7 @@ $contents = file_get_contents($file);
 
 while ($contents == '0') {
     $contents = file_get_contents($file);
+    unlink($file);
 }
 
 
