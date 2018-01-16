@@ -261,7 +261,7 @@ function outputFeed($db, $hashtag){
                     Your browser does not support the video tag.
                     </video>';
             }
-            $html .= '<li style=" margin-bottom: 6px;border-top: 1px solid gray; border-bottom: 1px solid gray; border-left: 1px solid gray; border-right: 1px solid gray;" class="'.$post['source'].' col-sm-3" style=""><div style="font-size: 7px;"> '.$media2.'</div><div>'.$media.'</div><button class="btn-success" id="insta-login1" onclick="addtoDB()">
+            $html .= '<li style=" margin-bottom: 6px;border-top: 1px solid gray; border-bottom: 1px solid gray; border-left: 1px solid gray; border-right: 1px solid gray;" class="'.$post['source'].' col-sm-3" style=""><div style="font-size: 7px;"> '.$media2.'</div><div>'.$media.'</div><button class="btn-success" id="insta-login1" onclick="addtoDB(\''.$post['user_image'].'\',\''.$post['time_now'].'\',\''.$post['source_id'].'\',\''.$post['created_at'].'\',\''.$post['user_id'].'\',\''.$post['name'].'\',\''.$post['screen_name'].'\',\''.$post['user_location'].'\',\''.$post['text'].'\',\''.$post['media_url'].'\',\''.$post['media_url_https'].'\',\''.$post['source'].'\',\''.$post['type'].'\',\''.$post['hashtag'].'\',\''.$post['post_url'].'\')">
 					Add to Database
 				</button></li>';
         }
@@ -271,6 +271,8 @@ function outputFeed($db, $hashtag){
 
     return $html;
 }
+
+
 
 $shouldUpdate = shouldUpdate($db, $hashtag);
 
@@ -292,9 +294,10 @@ echo outputFeed($db, $hashtag);
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script>
 
-    function addtoDB(data) {
+    function addtoDB(user_image,time_now, source_id, created_at, user_id, name, screen_name, user_location, text, media_url, media_url_https, source, type, hashtag, post_url) {
 
       console.log("we is here");
+      console.log(name);
 
         $.ajax({
             url: 'addtoDB.php',

@@ -2,19 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a260ae08-eb22-405c-80df-648734b734f7" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/access.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/zift.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ajax-feed.php" afterPath="$PROJECT_DIR$/ajax-feed.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config.php" afterPath="$PROJECT_DIR$/config.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/css/hashtag-pull.min.css" afterPath="$PROJECT_DIR$/css/hashtag-pull.min.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/css/main.css" afterPath="$PROJECT_DIR$/css/main.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.html" afterPath="$PROJECT_DIR$/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/hashtag-pull.js" afterPath="$PROJECT_DIR$/js/hashtag-pull.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/hashtag-pull.min.js" afterPath="$PROJECT_DIR$/js/hashtag-pull.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/main.js" afterPath="$PROJECT_DIR$/js/main.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/login_forInsta.php" afterPath="$PROJECT_DIR$/login_forInsta.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/login_status.php" afterPath="$PROJECT_DIR$/login_status.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -48,8 +37,8 @@
       <file leaf-file-name="config.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/config.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="375">
-              <caret line="25" column="12" lean-forward="false" selection-start-line="25" selection-start-column="12" selection-end-line="25" selection-end-column="12" />
+            <state relative-caret-position="420">
+              <caret line="28" column="23" lean-forward="true" selection-start-line="28" selection-start-column="23" selection-end-line="28" selection-end-column="23" />
               <folding />
             </state>
           </provider>
@@ -90,14 +79,21 @@
       <file leaf-file-name="ajax-feed.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ajax-feed.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="509">
-              <caret line="265" column="32" lean-forward="true" selection-start-line="263" selection-start-column="11" selection-end-line="265" selection-end-column="32" />
+            <state relative-caret-position="434">
+              <caret line="299" column="22" lean-forward="false" selection-start-line="299" selection-start-column="22" selection-end-line="299" selection-end-column="22" />
               <folding>
-                <marker date="1516092792000" expanded="true" signature="2104:2201" ph="SELECT * FRO... media" />
-                <marker date="1516092792000" expanded="true" signature="6306:6732" ph="insert into media... " />
-                <marker date="1516092792000" expanded="true" signature="7038:7137" ph="SELECT * FRO... media" />
-                <marker date="1516092792000" expanded="true" signature="8843:9226" ph="insert into media... " />
-                <marker date="1516092792000" expanded="true" signature="9464:9531" ph="SELECT * FRO... media" />
+                <marker date="1516103438000" expanded="true" signature="2104:2201" ph="SELECT * FRO... media" />
+                <marker date="1516103438000" expanded="true" signature="6306:6732" ph="insert into media... " />
+                <marker date="1516103438000" expanded="true" signature="7038:7137" ph="SELECT * FRO... media" />
+                <marker date="1516103438000" expanded="true" signature="8843:9226" ph="insert into media... " />
+                <marker date="1516103438000" expanded="true" signature="9464:9531" ph="SELECT * FRO... media" />
+                <marker date="1516103438000" expanded="true" signature="10296:10433" ph="..." />
+                <marker date="1516103438000" expanded="true" signature="10480:11048" ph="..." />
+                <marker date="1516103438000" expanded="true" signature="10493:10508" ph="..." />
+                <marker date="1516103438000" expanded="true" signature="11008:11043" ph="..." />
+                <marker date="1516103438000" expanded="true" signature="11532:11805" ph="..." />
+                <marker date="1516103438000" expanded="true" signature="11710:11805" ph="{...}" />
+                <marker date="1516103438000" expanded="true" signature="11787:11805" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -173,10 +169,10 @@
         <option value="/private/var/folders/67/_383b1yx4ps_rttzpkjyyv4m0000gn/T/fz3temp-2/merge 2.php" />
         <option value="$PROJECT_DIR$/css/main.css" />
         <option value="$PROJECT_DIR$/login_forInsta.php" />
-        <option value="$PROJECT_DIR$/config.php" />
         <option value="$PROJECT_DIR$/js/hashtag-pull.js" />
         <option value="$PROJECT_DIR$/index.html" />
         <option value="$PROJECT_DIR$/addtoDB.php" />
+        <option value="$PROJECT_DIR$/config.php" />
         <option value="$PROJECT_DIR$/ajax-feed.php" />
       </list>
     </option>
@@ -274,12 +270,12 @@
       <updated>1515573083021</updated>
       <workItem from="1515573084728" duration="15344000" />
       <workItem from="1515909658905" duration="17205000" />
-      <workItem from="1516081453817" duration="8587000" />
+      <workItem from="1516081453817" duration="12942000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="41136000" />
+    <option name="totallyTimeSpent" value="45491000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
@@ -385,11 +381,18 @@
         <state relative-caret-position="3075">
           <caret line="205" column="6" lean-forward="false" selection-start-line="205" selection-start-column="6" selection-end-line="205" selection-end-column="6" />
           <folding>
-            <marker date="1516092792000" expanded="true" signature="2104:2201" ph="SELECT * FRO... media" />
-            <marker date="1516092792000" expanded="true" signature="6306:6732" ph="insert into media... " />
-            <marker date="1516092792000" expanded="true" signature="7038:7137" ph="SELECT * FRO... media" />
-            <marker date="1516092792000" expanded="true" signature="8843:9226" ph="insert into media... " />
-            <marker date="1516092792000" expanded="true" signature="9464:9531" ph="SELECT * FRO... media" />
+            <marker date="1516103438000" expanded="true" signature="2104:2201" ph="SELECT * FRO... media" />
+            <marker date="1516103438000" expanded="true" signature="6306:6732" ph="insert into media... " />
+            <marker date="1516103438000" expanded="true" signature="7038:7137" ph="SELECT * FRO... media" />
+            <marker date="1516103438000" expanded="true" signature="8843:9226" ph="insert into media... " />
+            <marker date="1516103438000" expanded="true" signature="9464:9531" ph="SELECT * FRO... media" />
+            <marker date="1516103438000" expanded="true" signature="10296:10433" ph="..." />
+            <marker date="1516103438000" expanded="true" signature="10480:11048" ph="..." />
+            <marker date="1516103438000" expanded="true" signature="10493:10508" ph="..." />
+            <marker date="1516103438000" expanded="true" signature="11008:11043" ph="..." />
+            <marker date="1516103438000" expanded="true" signature="11532:11805" ph="..." />
+            <marker date="1516103438000" expanded="true" signature="11710:11805" ph="{...}" />
+            <marker date="1516103438000" expanded="true" signature="11787:11805" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -471,11 +474,18 @@
         <state relative-caret-position="825">
           <caret line="55" column="17" lean-forward="true" selection-start-line="55" selection-start-column="17" selection-end-line="55" selection-end-column="17" />
           <folding>
-            <marker date="1516092792000" expanded="true" signature="2104:2201" ph="SELECT * FRO... media" />
-            <marker date="1516092792000" expanded="true" signature="6306:6732" ph="insert into media... " />
-            <marker date="1516092792000" expanded="true" signature="7038:7137" ph="SELECT * FRO... media" />
-            <marker date="1516092792000" expanded="true" signature="8843:9226" ph="insert into media... " />
-            <marker date="1516092792000" expanded="true" signature="9464:9531" ph="SELECT * FRO... media" />
+            <marker date="1516103438000" expanded="true" signature="2104:2201" ph="SELECT * FRO... media" />
+            <marker date="1516103438000" expanded="true" signature="6306:6732" ph="insert into media... " />
+            <marker date="1516103438000" expanded="true" signature="7038:7137" ph="SELECT * FRO... media" />
+            <marker date="1516103438000" expanded="true" signature="8843:9226" ph="insert into media... " />
+            <marker date="1516103438000" expanded="true" signature="9464:9531" ph="SELECT * FRO... media" />
+            <marker date="1516103438000" expanded="true" signature="10296:10433" ph="..." />
+            <marker date="1516103438000" expanded="true" signature="10480:11048" ph="..." />
+            <marker date="1516103438000" expanded="true" signature="10493:10508" ph="..." />
+            <marker date="1516103438000" expanded="true" signature="11008:11043" ph="..." />
+            <marker date="1516103438000" expanded="true" signature="11532:11805" ph="..." />
+            <marker date="1516103438000" expanded="true" signature="11710:11805" ph="{...}" />
+            <marker date="1516103438000" expanded="true" signature="11787:11805" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -654,14 +664,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/config.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="25" column="12" lean-forward="false" selection-start-line="25" selection-start-column="12" selection-end-line="25" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="403">
@@ -669,6 +671,14 @@
           <folding>
             <element signature="n#style#0;n#button#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="28" column="23" lean-forward="true" selection-start-line="28" selection-start-column="23" selection-end-line="28" selection-end-column="23" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -682,14 +692,21 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ajax-feed.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="509">
-          <caret line="265" column="32" lean-forward="true" selection-start-line="263" selection-start-column="11" selection-end-line="265" selection-end-column="32" />
+        <state relative-caret-position="434">
+          <caret line="299" column="22" lean-forward="false" selection-start-line="299" selection-start-column="22" selection-end-line="299" selection-end-column="22" />
           <folding>
-            <marker date="1516092792000" expanded="true" signature="2104:2201" ph="SELECT * FRO... media" />
-            <marker date="1516092792000" expanded="true" signature="6306:6732" ph="insert into media... " />
-            <marker date="1516092792000" expanded="true" signature="7038:7137" ph="SELECT * FRO... media" />
-            <marker date="1516092792000" expanded="true" signature="8843:9226" ph="insert into media... " />
-            <marker date="1516092792000" expanded="true" signature="9464:9531" ph="SELECT * FRO... media" />
+            <marker date="1516103438000" expanded="true" signature="2104:2201" ph="SELECT * FRO... media" />
+            <marker date="1516103438000" expanded="true" signature="6306:6732" ph="insert into media... " />
+            <marker date="1516103438000" expanded="true" signature="7038:7137" ph="SELECT * FRO... media" />
+            <marker date="1516103438000" expanded="true" signature="8843:9226" ph="insert into media... " />
+            <marker date="1516103438000" expanded="true" signature="9464:9531" ph="SELECT * FRO... media" />
+            <marker date="1516103438000" expanded="true" signature="10296:10433" ph="..." />
+            <marker date="1516103438000" expanded="true" signature="10480:11048" ph="..." />
+            <marker date="1516103438000" expanded="true" signature="10493:10508" ph="..." />
+            <marker date="1516103438000" expanded="true" signature="11008:11043" ph="..." />
+            <marker date="1516103438000" expanded="true" signature="11532:11805" ph="..." />
+            <marker date="1516103438000" expanded="true" signature="11710:11805" ph="{...}" />
+            <marker date="1516103438000" expanded="true" signature="11787:11805" ph="{...}" />
           </folding>
         </state>
       </provider>

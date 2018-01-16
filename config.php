@@ -23,6 +23,13 @@ $db = array(
     'name' =>       'hashtag_pull'
 );
 
+$db2 = array(
+    'host' =>       '127.0.0.1',
+    'user' =>       'root',
+    'password' =>   '',
+    'name' =>       'hashtag_live'
+);
+
 $hashtag = '';
 
 ?>
