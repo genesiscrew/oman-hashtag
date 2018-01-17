@@ -11,6 +11,22 @@ if ($_GET["hashtag"]) {
 
 
 
+$filename = "null";
+$county = "null";
+$numbre = "null";
+$instaitems = [];
+
+
+
+if(isset($_GET['function'])) {
+    if($_GET['function'] == 'insta') {
+        updateInstagram($_GET['hashtag']);
+    } elseif($_GET['function'] == 'date') {
+        // do date stuff
+    }
+}
+
+
 
 
 
@@ -146,16 +162,68 @@ function updateTwitter($db, $twitter, $hashtag){
             foreach($media->statuses as $tweet){
                 if ($tweet->id > $twitter['last_id'] && (!empty($tweet->entities->urls) || isset($tweet->entities->media))){
                     $twitter_id = $tweet->id;
+                    if(!$twitter_id){
+                        $twitter_id = null;
+
+                    }
+
+
                     $tweet_id = $tweet->id_str;
+
+                    if(!$tweet_id){
+                        $tweet_id = null;
+
+                    }
+
                     $created_at = $tweet->created_at;
+                    if(!$created_at){
+                        $created_at = null;
+
+                    }
+
                     $user_id = $tweet->user->id;
+                    if(!$user_id){
+                        $user_id = null;
+
+                    }
+
                     $twitter_profile_image = $tweet->user->profile_image_url;
+                    if(!$twitter_profile_image){
+                        $twitter_profile_image = null;
+
+                    }
+
                     $this_name = mysqli_real_escape_string($db_con, stripEmojis($tweet->user->name));
+                    if(!$this_name){
+                        $this_name = null;
+
+                    }
+
                     $screen_name =  mysqli_real_escape_string($db_con, $tweet->user->screen_name);
+                    if(!$screen_name){
+                        $screen_name = null;
+
+                    }
+
                     $user_location = mysqli_real_escape_string($db_con, stripEmojis($tweet->user->location));
+                    if(!$user_location){
+                        $user_location = "Unknown";
+
+                    }
+
                     $text = mysqli_real_escape_string($db_con, stripEmojis($tweet->text));
+
+                    if(!$text){
+                        $text = null;
+
+                    }
+
                     $link_post = 'https://twitter.com/'.$screen_name.'/status/'.$tweet_id;
+
                     $time_now = time();
+                   if(!$twitter_id ||  !$user_id || !$twitter_profile_image || !$this_name || !$screen_name || !$user_location || !$text || !$link_post) {
+                        var_dump("missing data");
+                    }
                     $is_vine = false;
                     $is_tweet = false;
                     $type = 'photo';
@@ -163,6 +231,9 @@ function updateTwitter($db, $twitter, $hashtag){
                         $is_tweet = true;
                         $media_url = $tweet->entities->media[0]->media_url;
                         $media_url_https = $tweet->entities->media[0]->media_url_https;
+                        if (!$media_url_https) {
+                            $media_url_https = "Unknown";
+                        }
                     } /* else if (strpos($tweet->entities->urls[0]->expanded_url,'vine.co') !== false && $name == 'vine' && !empty($tweet->entities->urls) && isset($tweet->entities->urls[0]->expanded_url)){
                         $is_vine = true;
                         $type = 'video';
@@ -187,20 +258,20 @@ function updateTwitter($db, $twitter, $hashtag){
     mysqli_close($db_con);
 }
 
-function updateInstagram($db, $instagram, $hashtag){
-    $db_con = mysqli_connect($db['host'], $db['user'], $db['password'], $db['name']);
+function updateInstagram($hashtag){
+    //$db_con = mysqli_connect($db['host'], $db['user'], $db['password'], $db['name']);
 
     // get the last id
-    $query = mysqli_query($db_con, "SELECT * FROM media WHERE hashtag='$hashtag' AND source='instagram' ORDER BY source_id DESC LIMIT 1");
-    $result = mysqli_fetch_array($query);
+   // $query = mysqli_query($db_con, "SELECT * FROM media WHERE hashtag='$hashtag' AND source='instagram' ORDER BY source_id DESC LIMIT 1");
+    //$result = mysqli_fetch_array($query);
 
     $insta_access_path = __DIR__ . "/access.txt";
     $access_token = file_get_contents($insta_access_path);
     //unlink($insta_access_path);
     $get_media_url = 'https://api.instagram.com/v1/tags/'.$hashtag.'/media/recent?access_token='. $access_token;
-    if (isset($result['source_id'])){
-        $get_media_url .= '&max_tag_id='.$result['source_id'];
-    }
+   // if (isset($result['source_id'])){
+     //   $get_media_url .= '&max_tag_id='.$result['source_id'];
+    //}
 
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $get_media_url);
@@ -211,6 +282,8 @@ function updateInstagram($db, $instagram, $hashtag){
 
     //var_dump($response);
 
+    $instaoutput = [];
+
     foreach($media['data'] as $insta){
 
         $time_now = time();
@@ -219,9 +292,9 @@ function updateInstagram($db, $instagram, $hashtag){
         $user_id = $insta['user']['id'];
         $user_image = $insta['user']['profile_picture'];
         $post_link = $insta['link'];
-        $screen_name = mysqli_real_escape_string($db_con,  $insta['user']['username']);
-        $this_name =  mysqli_real_escape_string($db_con, stripEmojis($insta['user']['full_name']));
-        $text =  mysqli_real_escape_string($db_con, stripEmojis($insta['caption']['text']));
+        $screen_name = $insta['user']['username'];
+        $this_name =   stripEmojis($insta['user']['full_name']);
+        $text =   stripEmojis($insta['caption']['text']);
         $likes = $insta['likes']['count'];
 
         if ($insta['type'] == 'video'){
@@ -234,13 +307,17 @@ function updateInstagram($db, $instagram, $hashtag){
             $media_url_https= '';
         }
 
-        if (mysqli_query($db_con,
-            "insert into media (user_image,time_now, source_id, created_at, user_id, name, screen_name, text, likes, media_url, media_url_https, source, type, hashtag, post_url) ".
-            "values('$user_image','$time_now', '$source_id', '$created_at','$user_id','$this_name','$screen_name', '$text', '$likes', '$media_url', '$media_url_https', 'instagram', '$type', '$hashtag', '$post_link')")){}
+       // if (mysqli_query($db_con,
+         //   "insert into media (user_image,time_now, source_id, created_at, user_id, name, screen_name, text, likes, media_url, media_url_https, source, type, hashtag, post_url) ".
+          //  "values('$user_image','$time_now', '$source_id', '$created_at','$user_id','$this_name','$screen_name', '$text', '$likes', '$media_url', '$media_url_https', 'instagram', '$type', '$hashtag', '$post_link')")){}
+        array_push($instaoutput,json_encode($insta));
     }
 
-    mysqli_close($db_con);
+    echo json_encode($instaoutput);
+
+  //  mysqli_close($db_con);
 }
+
 
 
 
@@ -250,6 +327,7 @@ function outputFeed($db, $hashtag){
     $html = '<ul class="feed">';
     $db_con = mysqli_connect($db['host'], $db['user'], $db['password'], $db['name']);
     $query = mysqli_query($db_con, "SELECT * FROM media WHERE hashtag='$hashtag' ORDER BY time_now DESC");
+    $counter = 0;
     if (mysqli_num_rows($query) > 0) {
         while ($post = mysqli_fetch_assoc($query)) {
             if ($post['type'] == 'photo'){
@@ -261,9 +339,26 @@ function outputFeed($db, $hashtag){
                     Your browser does not support the video tag.
                     </video>';
             }
-            $html .= '<li style=" margin-bottom: 6px;border-top: 1px solid gray; border-bottom: 1px solid gray; border-left: 1px solid gray; border-right: 1px solid gray;" class="'.$post['source'].' col-sm-3" style=""><div style="font-size: 7px;"> '.$media2.'</div><div>'.$media.'</div><button class="btn-success" id="insta-login1" onclick="addtoDB(\''.$post['user_image'].'\',\''.$post['time_now'].'\',\''.$post['source_id'].'\',\''.$post['created_at'].'\',\''.$post['user_id'].'\',\''.$post['name'].'\',\''.$post['screen_name'].'\',\''.$post['user_location'].'\',\''.$post['text'].'\',\''.$post['media_url'].'\',\''.$post['media_url_https'].'\',\''.$post['source'].'\',\''.$post['type'].'\',\''.$post['hashtag'].'\',\''.$post['post_url'].'\')">
+
+            $text = str_replace("'", "\'", $post['text']);
+
+            if ($counter == 0) {
+
+                $numbre = 'zero';
+            }
+            else {
+                $numbre = N2L($counter);
+            }
+
+            $filename = date('YmdHis');
+            $county = 'a'.strval($counter);
+            $numbre = json_encode($post);
+
+
+            $html .= '<li class="quad"  style=" margin-bottom: 6px;border-top: 1px solid gray; border-bottom: 1px solid gray; border-left: 1px solid gray; border-right: 1px solid gray;" class="'.$post['source'].' col-sm-3" style=""><div style="font-size: 7px;"> '.$media2.'</div><div>'.$media.'</div><button class="btn-success" id="insta-login1" >
 					Add to Database
 				</button></li>';
+            $counter++;
         }
     }
     $html .= '</ul>';
@@ -273,7 +368,7 @@ function outputFeed($db, $hashtag){
 }
 
 
-
+/*
 $shouldUpdate = shouldUpdate($db, $hashtag);
 
 if ($shouldUpdate !== false){
@@ -287,30 +382,10 @@ if ($shouldUpdate !== false){
     updateTwitter($db, $twitter, $hashtag);
 }
 
-echo outputFeed($db, $hashtag);
+echo outputFeed($db, $hashtag);  */
 
 
 ?>
-<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script>
-
-    function addtoDB(user_image,time_now, source_id, created_at, user_id, name, screen_name, user_location, text, media_url, media_url_https, source, type, hashtag, post_url) {
-
-      console.log("we is here");
-      console.log(name);
-
-        $.ajax({
-            url: 'addtoDB.php',
-            success: function (response) {
-
-            },
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                alert("Status: " + textStatus);
-                alert("Error: " + errorThrown);
-            }
-        });
 
 
-    }
 
-</script>

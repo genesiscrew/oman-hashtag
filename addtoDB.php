@@ -8,8 +8,9 @@
 
 //require __DIR__ . '/vendor/autoload.php';
 
+include('config.php');
 
-$concat1 = __DIR__ . "/" . $_GET['file'];
+$data = $_GET['name'];
 
-$data = $_GET['data'];
+echo $data;
 

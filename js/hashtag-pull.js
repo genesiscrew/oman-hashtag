@@ -52,9 +52,16 @@ function get_feed(){
 
     console.log(data);
     $.ajax({
-        url: "ajax-feed.php?hashtag="+data
-    }).done(function(feed_data) {
-        $('.container').empty().html(feed_data);
+        url: "ajax-feed.php?hashtag="+data,
+        success: function (response) {
+            console.log("closing the insta window");
+            console.log(response) ;
+            //removeFiles();
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            alert("Status: " + textStatus);
+            alert("Error: " + errorThrown);
+        }
     });
 }
 
@@ -64,12 +71,25 @@ $(document).ready(function(){
 
     console.log("are we here ");
 
-    $("#taghash").click(function(){
-        data =  $("#hashtag").val();
+    $("#taghash").click(function() {
+        data = $("#hashtag").val();
         $.ajax({
-            url: "ajax-feed.php?hashtag="+data
-        }).done(function(feed_data) {
-            $('.container').empty().html(feed_data);
+            url: "ajax-feed.php?hashtag=" + data + '&function=insta',
+            success: function (response) {
+                console.log("closing the insta window");
+                var myArray = JSON.parse(response);
+
+                var item = JSON.parse(myArray[0]);
+                console.log(item.caption.text);
+
+
+                setTweet(0,item);
+
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert("Status: " + textStatus);
+                alert("Error: " + errorThrown);
+            }
         });
 
     });
@@ -79,3 +99,42 @@ $(document).ready(function(){
         get_feed();
     }, 300000);
 });
+
+
+function setTweet(id, tweet) {
+    console.log(tweet);
+    var name = (tweet.user.full_name.length < 17) ? tweet.name : tweet.name.substr(0, 15) + "..";
+
+    var text = tweet.caption.text;
+
+    console.log(text);
+
+    /* if there is an uri in the text, complement it with a 'href' */
+    var regex = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
+    var uri = text.match(regex);
+
+    if (uri != 1) {
+        for (var i in uri)
+            text = text.replace(uri[i],
+                "<a href='" + uri[i] + "'>" + uri[i] + "</a>");
+    }
+
+    /* make hashtags clickable */
+    var regex = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
+    var uri = text.match(regex);
+
+    var content = '<div class="text">\
+		<div>' + text + '</div>\
+	</div>\
+	\
+	<div class="info">\
+		<img class="author" src="' + tweet.user.profile_picture + '" alt="" align="left" />\
+		<span class="name"><a href="http://instagram.com/' +
+        tweet.user.username + '">@' + tweet.user.username + '</a></span>\
+	</div>';
+    var tid = "tweet"+id;
+
+    $( ".container" ).append( "<div class=\"tweet\" id=\""+tid+"\">"+content +"</div>" );
+
+    //$('.tweet').html(content);
+}
