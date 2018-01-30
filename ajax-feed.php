@@ -25,11 +25,17 @@ if(isset($_GET['function'])) {
         // do date stuff
     } elseif($_GET['function'] == 'DB') {
         // do date stuff
+        if(file_get_contents("php://input")){
+            //$json = json_decode(file_get_contents("php://input"),TRUE);
+            //add to DB
+            header("Content-Type: application/json");
+            $postdata = file_get_contents("php://input");
+            parse_str(file_get_contents('php://input', false , null, -1 ,
+                $_SERVER['CONTENT_LENGTH'] ), $postdata);
 
-    } elseif(isset($_POST['myData'])){
-        $obj = json_decode($_POST['myData']);
-        //add to DB
-        addtoDB($db,$obj,$_GET['hashtag'],$instagram);
+            addtoDB($db,$postdata,$_GET['hashtag'],$instagram);
+        }
+
     }
 }
 
@@ -59,6 +65,7 @@ function addtoDB($db, $insta, $hashtag,$instagram){
         $source_id = $insta['id'];
         $created_at = date('r', $insta['created_time']);
         $user_id = $insta['user']['id'];
+        $post_link = $insta['link'];
         $screen_name = mysqli_real_escape_string($db_con,  $insta['user']['username']);
         $this_name =  mysqli_real_escape_string($db_con, stripEmojis($insta['user']['full_name']));
         $text =  mysqli_real_escape_string($db_con, stripEmojis($insta['caption']['text']));
@@ -80,6 +87,7 @@ function addtoDB($db, $insta, $hashtag,$instagram){
 
 
     mysqli_close($db_con);
+    
 }
 
 

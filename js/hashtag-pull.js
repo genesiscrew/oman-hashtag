@@ -25,13 +25,15 @@ function addToDB(selection,data) {
     }); */
 
  console.log("about to post data");
+    console.log(selection);
 
     $.ajax({
-        url: "ajax-feed.php?hashtag=" + data,
+        url: "ajax-feed.php?hashtag=" + data + '&function=DB',
+        headers : {'Content-Type':'application/json'},
         type: 'post',
-        dataType: 'json',
         success: function (data) {
-            console.log("item added succesfully");
+            console.log("we are here");
+            console.log(data);
         },
         data: selection,
         error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -67,7 +69,6 @@ function instagram_login(selection) {
         success: function (response) {
             console.log("closing the insta window");
             popup.close();
-            //removeFiles();
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             alert("Status: " + textStatus);
@@ -102,12 +103,16 @@ function get_feed(){
 $(document).ready(function(){
     //get_feed();
 
-    console.log("are we here ");
+    console.log("are we here");
 
     $(document).on('click','.addDB',function(){
-        //addToDB(tweet,data)
-        var tmp = $(this).attr('id').split("-");
-        alert(tmp);
+        //
+        var tmp = JSON.parse(myArray[$(this).attr('id').split("-")[1]]);
+
+       addToDB(tmp,data);
+
+
+
 
     });
 
