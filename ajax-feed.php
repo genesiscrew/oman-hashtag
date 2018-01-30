@@ -29,13 +29,13 @@ if(isset($_GET['function'])) {
     } elseif(isset($_POST['myData'])){
         $obj = json_decode($_POST['myData']);
         //add to DB
-        addtoDB($db,null,$_GET['hashtag']);
+        addtoDB($db,$obj,$_GET['hashtag'],$instagram);
     }
 }
 
 
 
-function addtoDB($db, $instagram, $hashtag){
+function addtoDB($db, $insta, $hashtag,$instagram){
     $db_con = mysqli_connect($db['host'], $db['user'], $db['password'], $db['name']);
 
     // get the last id
@@ -55,7 +55,6 @@ function addtoDB($db, $instagram, $hashtag){
 
     $media = json_decode($response, true);
 
-    foreach($media['data'] as $insta){
         $time_now = time();
         $source_id = $insta['id'];
         $created_at = date('r', $insta['created_time']);
@@ -78,7 +77,7 @@ function addtoDB($db, $instagram, $hashtag){
         if (mysqli_query($db_con,
             "insert into media (time_now, source_id, created_at, user_id, name, screen_name, text, likes, media_url, media_url_https, source, type, hashtag, post_url) ".
             "values('$time_now', '$source_id', '$created_at','$user_id','$this_name','$screen_name', '$text', '$likes', '$media_url', '$media_url_https', 'instagram', '$type', '$hashtag', '$post_link')")){}
-    }
+
 
     mysqli_close($db_con);
 }

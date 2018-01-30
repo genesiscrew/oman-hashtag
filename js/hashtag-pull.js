@@ -8,6 +8,7 @@ hashtag-pull - v - 2018-01-10
 Pulls twitter, vine, and instagram posts with a certain hashtag.
 Lovingly coded by Jess Frazelle  - http://frazelledazzell.com/
 */var data = "dubai";
+var  myArray = [];
 
 function addToDB(selection,data) {
 
@@ -23,6 +24,8 @@ function addToDB(selection,data) {
         }
     }); */
 
+ console.log("about to post data");
+
     $.ajax({
         url: "ajax-feed.php?hashtag=" + data,
         type: 'post',
@@ -30,7 +33,12 @@ function addToDB(selection,data) {
         success: function (data) {
             console.log("item added succesfully");
         },
-        data: selection
+        data: selection,
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+        alert("Status: " + textStatus);
+        alert("Error: " + errorThrown);
+    }
+
     })
 
 
@@ -96,13 +104,20 @@ $(document).ready(function(){
 
     console.log("are we here ");
 
+    $(document).on('click','.addDB',function(){
+        //addToDB(tweet,data)
+        var tmp = $(this).attr('id').split("-");
+        alert(tmp);
+
+    });
+
     $("#taghash").click(function() {
         data = $("#hashtag").val();
         $.ajax({
             url: "ajax-feed.php?hashtag=" + data + '&function=insta',
             success: function (response) {
                 console.log("closing the insta window");
-                var myArray = JSON.parse(response);
+                myArray = JSON.parse(response);
 
 
                var rowCounter = 0;
@@ -176,7 +191,7 @@ function setTweet(id, tweet,row,data) {
 		<img class="author" src="' + tweet.user.profile_picture + '" alt="" align="left" />\
 		<span class="name"><a href="http://instagram.com/' +
         tweet.user.username + '">@' + tweet.user.username + '</a></span>\
-        \<button class="btn-success" id="insta-login1" onclick="'+addToDB(tweet,data)+' ; return false;">\n' +
+        \<button class="btn-success addDB" id="addDB-'+id+'">\n' +
         '\t\t\t\t\tAdd to DB\n' +
         '\t\t\t\t</button>\
 	</div>';
