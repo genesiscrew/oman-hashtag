@@ -9,7 +9,32 @@ Pulls twitter, vine, and instagram posts with a certain hashtag.
 Lovingly coded by Jess Frazelle  - http://frazelledazzell.com/
 */var data = "dubai";
 
+function addToDB(selection,data) {
 
+ /*   $.ajax({
+        url: "ajax-feed.php?hashtag=" + data + '&function=DB',
+        success: function (response) {
+            console.log("item added to DB");
+            //removeFiles();
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            alert("Status: " + textStatus);
+            alert("Error: " + errorThrown);
+        }
+    }); */
+
+    $.ajax({
+        url: "ajax-feed.php?hashtag=" + data,
+        type: 'post',
+        dataType: 'json',
+        success: function (data) {
+            console.log("item added succesfully");
+        },
+        data: selection
+    })
+
+
+}
 
 
 function instagram_login(selection) {
@@ -79,11 +104,31 @@ $(document).ready(function(){
                 console.log("closing the insta window");
                 var myArray = JSON.parse(response);
 
-                var item = JSON.parse(myArray[0]);
-                console.log(item.caption.text);
+
+               var rowCounter = 0;
+               var rowLength = 2;
+
+                for (var e = 0; e < myArray.length; e+= rowLength) {
+
+                    $( ".container").append( "<div class=\"row\" id=\"row"+rowCounter+"\"></div>" );
+                    rowCounter++;
 
 
-                setTweet(0,item);
+                }
+                var rowCounter2 = 0;
+                var rowCounter3 = 0;
+               for (var i = 0; i < myArray.length; i++) {
+                   var item = JSON.parse(myArray[i]);
+                   if (rowCounter2 == rowLength+1) {
+                       rowCounter3++;
+                       rowCounter2= 0;
+                   }
+                   setTweet(rowCounter2,item,rowCounter3,data);
+
+                   rowCounter2++;
+
+               }
+
 
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -101,7 +146,7 @@ $(document).ready(function(){
 });
 
 
-function setTweet(id, tweet) {
+function setTweet(id, tweet,row,data) {
     console.log(tweet);
     var name = (tweet.user.full_name.length < 17) ? tweet.name : tweet.name.substr(0, 15) + "..";
 
@@ -131,10 +176,14 @@ function setTweet(id, tweet) {
 		<img class="author" src="' + tweet.user.profile_picture + '" alt="" align="left" />\
 		<span class="name"><a href="http://instagram.com/' +
         tweet.user.username + '">@' + tweet.user.username + '</a></span>\
+        \<button class="btn-success" id="insta-login1" onclick="'+addToDB(tweet,data)+' ; return false;">\n' +
+        '\t\t\t\t\tAdd to DB\n' +
+        '\t\t\t\t</button>\
 	</div>';
-    var tid = "tweet"+id;
+    var tid = "tweet"+(id+1);
+    console.log(".row"+row+"");
 
-    $( ".container" ).append( "<div class=\"tweet\" id=\""+tid+"\">"+content +"</div>" );
+    $( "#row"+row+"" ).append( "<div class=\"tweet col-md-3\" id=\""+tid+"\">"+content +"</div>" );
 
     //$('.tweet').html(content);
 }

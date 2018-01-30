@@ -23,12 +23,65 @@ if(isset($_GET['function'])) {
         updateInstagram($_GET['hashtag']);
     } elseif($_GET['function'] == 'date') {
         // do date stuff
+    } elseif($_GET['function'] == 'DB') {
+        // do date stuff
+
+    } elseif(isset($_POST['myData'])){
+        $obj = json_decode($_POST['myData']);
+        //add to DB
+        addtoDB($db,null,$_GET['hashtag']);
     }
 }
 
 
 
+function addtoDB($db, $instagram, $hashtag){
+    $db_con = mysqli_connect($db['host'], $db['user'], $db['password'], $db['name']);
 
+    // get the last id
+    $query = mysqli_query($db_con, "SELECT * FROM media WHERE hashtag='$hashtag' AND source='instagram' ORDER BY source_id DESC LIMIT 1");
+    $result = mysqli_fetch_array($query);
+
+    $get_media_url = 'https://api.instagram.com/v1/tags/'.$hashtag.'/media/recent?access_token='.$instagram['access_token'];
+    if (isset($result['source_id'])){
+        $get_media_url .= '&max_tag_id='.$result['source_id'];
+    }
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $get_media_url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $response = curl_exec($ch);
+    curl_close($ch);
+
+    $media = json_decode($response, true);
+
+    foreach($media['data'] as $insta){
+        $time_now = time();
+        $source_id = $insta['id'];
+        $created_at = date('r', $insta['created_time']);
+        $user_id = $insta['user']['id'];
+        $screen_name = mysqli_real_escape_string($db_con,  $insta['user']['username']);
+        $this_name =  mysqli_real_escape_string($db_con, stripEmojis($insta['user']['full_name']));
+        $text =  mysqli_real_escape_string($db_con, stripEmojis($insta['caption']['text']));
+        $likes = $insta['likes']['count'];
+
+        if ($insta['type'] == 'video'){
+            $type= 'video';
+            $media_url=$insta['images']['standard_resolution']['url'];
+            $media_url_https=$insta['videos']['standard_resolution']['url'];
+        } else {
+            $type= 'photo';
+            $media_url=$insta['images']['standard_resolution']['url'];
+            $media_url_https= '';
+        }
+
+        if (mysqli_query($db_con,
+            "insert into media (time_now, source_id, created_at, user_id, name, screen_name, text, likes, media_url, media_url_https, source, type, hashtag, post_url) ".
+            "values('$time_now', '$source_id', '$created_at','$user_id','$this_name','$screen_name', '$text', '$likes', '$media_url', '$media_url_https', 'instagram', '$type', '$hashtag', '$post_link')")){}
+    }
+
+    mysqli_close($db_con);
+}
 
 
 
