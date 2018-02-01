@@ -12,17 +12,6 @@ var  myArray = [];
 
 function addToDB(selection,data) {
 
- /*   $.ajax({
-        url: "ajax-feed.php?hashtag=" + data + '&function=DB',
-        success: function (response) {
-            console.log("item added to DB");
-            //removeFiles();
-        },
-        error: function (XMLHttpRequest, textStatus, errorThrown) {
-            alert("Status: " + textStatus);
-            alert("Error: " + errorThrown);
-        }
-    }); */
 
  console.log("about to post data");
     console.log(selection);
@@ -61,7 +50,6 @@ function instagram_login(selection) {
         h = window.screen.availHeight * percent / 100;
     }
 
-
     var popup = window.open('https://instagram.com/oauth/authorize/?client_id=' + instagramClientId + '&redirect_uri=' + instagramRedirectUri + '&response_type=code', '_blank', 'width=' + w, 'height=' + h);
 
     $.ajax({
@@ -90,7 +78,6 @@ function get_feed(){
         success: function (response) {
             console.log("closing the insta window");
             console.log(response) ;
-            //removeFiles();
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             alert("Status: " + textStatus);
@@ -103,7 +90,26 @@ function get_feed(){
 $(document).ready(function(){
     //get_feed();
 
-    console.log("are we here");
+
+    //get html input, then insert into site
+
+    /*$( ".container").append( "<script src=\"//assets.juicer.io/embed.js\" type=\"text/javascript\"></script>\n" +
+        "<link href=\"//assets.juicer.io/embed.css\" media=\"all\" rel=\"stylesheet\" type=\"text/css\" />\n" +
+        "<ul class=\"juicer-feed\" data-feed-id=\"dubai\"><h1 class=\"referral\"><a href=\"https://www.juicer.io\">Powered by Juicer</a></h1></ul>" ); */
+
+    console.log("we are here now");
+
+
+
+
+    setTimeout(function(){
+        $( "<p>Test</p>" ).insertAfter( ".feed-item" );
+    },6000);
+
+
+
+
+  
 
     $(document).on('click','.addDB',function(){
         //
@@ -119,10 +125,14 @@ $(document).ready(function(){
     $("#taghash").click(function() {
         data = $("#hashtag").val();
         $.ajax({
-            url: "ajax-feed.php?hashtag=" + data + '&function=insta',
+            url: "ajax-feed.php?hashtag=" + data + '&function=twitter',
             success: function (response) {
-                console.log("closing the insta window");
-                myArray = JSON.parse(response);
+
+                myArray = JSON.stringify(String(response));
+
+               var myArray1 = JSON.parse(myArray);
+
+                console.log(myArray1);
 
 
                var rowCounter = 0;
@@ -165,6 +175,16 @@ $(document).ready(function(){
     }, 300000);
 });
 
+/**
+ * get html from user input then inject it into container
+ * @param data
+ */
+function addInstagramHTML(data) {
+
+    $( ".container").append( "" );
+
+
+}
 
 function setTweet(id, tweet,row,data) {
     console.log(tweet);
