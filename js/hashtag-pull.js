@@ -18,7 +18,8 @@ function addToDB(selection,data) {
 
     $.ajax({
         url: "ajax-feed.php?hashtag=" + data + '&function=DB',
-        headers : {'Content-Type':'application/json'},
+        headers : {'Content-Type':'application/test'},
+        dataType:'text',
         type: 'post',
         success: function (data) {
             console.log("we are here");
@@ -108,12 +109,12 @@ $(document).ready(function(){
 
 
 
-
   
 
     $(document).on('click','.addDB',function(){
         //
-        var tmp = JSON.parse(myArray[$(this).attr('id').split("-")[1]]);
+
+        var tmp = myArray[$(this).attr('id').split("-")[1]];
 
        addToDB(tmp,data);
 
@@ -125,14 +126,15 @@ $(document).ready(function(){
     $("#taghash").click(function() {
         data = $("#hashtag").val();
         $.ajax({
+            dataType : "json",
             url: "ajax-feed.php?hashtag=" + data + '&function=twitter',
             success: function (response) {
 
-                myArray = JSON.stringify(String(response));
+                // myArray = JSON.stringify(response);
 
-               var myArray1 = JSON.parse(myArray);
+                console.log(response);
 
-                console.log(myArray1);
+                myArray = response;
 
 
                var rowCounter = 0;
@@ -148,12 +150,13 @@ $(document).ready(function(){
                 var rowCounter2 = 0;
                 var rowCounter3 = 0;
                for (var i = 0; i < myArray.length; i++) {
-                   var item = JSON.parse(myArray[i]);
+                   var item = myArray[i];
+
                    if (rowCounter2 == rowLength+1) {
                        rowCounter3++;
                        rowCounter2= 0;
                    }
-                   setTweet(rowCounter2,item,rowCounter3,data);
+                   setTweet(i,item,rowCounter3,data);
 
                    rowCounter2++;
 
@@ -187,10 +190,12 @@ function addInstagramHTML(data) {
 }
 
 function setTweet(id, tweet,row,data) {
-    console.log(tweet);
-    var name = (tweet.user.full_name.length < 17) ? tweet.name : tweet.name.substr(0, 15) + "..";
 
-    var text = tweet.caption.text;
+    var name = (tweet.user.name.length < 17) ? tweet.user.name : tweet.user.name.substr(0, 15) + "..";
+
+    console.log(tweet.user.name);
+
+    var text = tweet.text;
 
     console.log(text);
 
@@ -214,13 +219,13 @@ function setTweet(id, tweet,row,data) {
 	\
 	<div class="info">\
 		<img class="author" src="' + tweet.user.profile_picture + '" alt="" align="left" />\
-		<span class="name"><a href="http://instagram.com/' +
-        tweet.user.username + '">@' + tweet.user.username + '</a></span>\
+		<span class="name"><a href="http://twitter.com/' +
+        tweet.user.name + '">@' + tweet.user.name + '</a></span>\
         \<button class="btn-success addDB" id="addDB-'+id+'">\n' +
         '\t\t\t\t\tAdd to DB\n' +
         '\t\t\t\t</button>\
 	</div>';
-    var tid = "tweet"+(id+1);
+    var tid = "tweet-"+(id+1);
     console.log(".row"+row+"");
 
     $( "#row"+row+"" ).append( "<div class=\"tweet col-md-3\" id=\""+tid+"\">"+content +"</div>" );

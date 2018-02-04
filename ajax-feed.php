@@ -2,6 +2,11 @@
 
 include('config.php');
 require_once('lib/twitteroauth.php');
+header('Access-Control-Allow-Origin: *');
+//error_reporting(0); // Disable all errors.
+
+//error_reporting(E_ERROR |
+ini_set('error_reporting', E_STRICT);
 
 //error_reporting(0);
 
@@ -36,7 +41,8 @@ if(isset($_GET['function'])) {
             parse_str(file_get_contents('php://input', false , null, -1 ,
                 $_SERVER['CONTENT_LENGTH'] ), $postdata);
 
-            addtoDB($db,$postdata,$_GET['hashtag'],$instagram);
+            addtoTweetDB($db,$twitter,$postdata,$_GET['hashtag']);
+            //$db,$twitter, $tweet, $hashtag
         }
 
     }
@@ -90,6 +96,7 @@ function addtoDB($db, $insta, $hashtag,$instagram){
 
 
     mysqli_close($db_con);
+
 
 }
 
@@ -177,76 +184,74 @@ function addtoTweetDB($db,$twitter, $tweet, $hashtag) {
     //$content = $connection->get('account/verify_credentials');
 
 
-
-                if ($tweet->id > $twitter['last_id'] && (!empty($tweet->entities->urls) || isset($tweet->entities->media))){
-                    $twitter_id = $tweet->id;
+                    $twitter_id = $tweet['id'];
                     if(!$twitter_id){
-                        $twitter_id = null;
+                        //$twitter_id = null;
+
                     }
 
-                    $tweet_id = $tweet->id_str;
+                    $tweet_id = $tweet['id_str'];
 
                     if(!$tweet_id){
                         $tweet_id = null;
 
                     }
 
-                    $created_at = $tweet->created_at;
+                    $created_at = $tweet['created_at'];
                     if(!$created_at){
                         $created_at = null;
 
                     }
 
-                    $user_id = $tweet->user->id;
+                    $user_id = $tweet['user']['id'];
                     if(!$user_id){
                         $user_id = null;
 
                     }
 
-                    $twitter_profile_image = $tweet->user->profile_image_url;
+                    $twitter_profile_image = $tweet['user']['profile_image_url'];
                     if(!$twitter_profile_image){
                         $twitter_profile_image = null;
 
                     }
 
-                    $this_name = mysqli_real_escape_string($db_con, stripEmojis($tweet->user->name));
+                    $this_name = mysqli_real_escape_string($db_con, stripEmojis($tweet['user']['name']));
                     if(!$this_name){
                         $this_name = null;
 
                     }
 
-                    $screen_name =  mysqli_real_escape_string($db_con, $tweet->user->screen_name);
+                    $screen_name =  mysqli_real_escape_string($db_con, $tweet['user']['screen_name']);
                     if(!$screen_name){
                         $screen_name = null;
 
                     }
 
-                    $user_location = mysqli_real_escape_string($db_con, stripEmojis($tweet->user->location));
+                    $user_location = mysqli_real_escape_string($db_con, stripEmojis($tweet['user']['location']));
                     if(!$user_location){
                         $user_location = "Unknown";
 
                     }
 
-                    $text = mysqli_real_escape_string($db_con, stripEmojis($tweet->text));
+                    $text = mysqli_real_escape_string($db_con, stripEmojis($tweet['text']));
 
                     if(!$text){
                         $text = null;
-
                     }
 
                     $link_post = 'https://twitter.com/'.$screen_name.'/status/'.$tweet_id;
 
                     $time_now = time();
                     if(!$twitter_id ||  !$user_id || !$twitter_profile_image || !$this_name || !$screen_name || !$user_location || !$text || !$link_post) {
-                        var_dump("missing data");
+                   //var_dump($twitter_id . " " . $user_id . " " . $twitter_profile_image . " " . $this_name . " " . $screen_name . " " . $user_location . " " . $text . " " . $link_post);
                     }
                     $is_vine = false;
                     $is_tweet = false;
                     $type = 'photo';
-                    if (isset($tweet->entities->media)){
+                    if ($tweet['is_tweet']){
                         $is_tweet = true;
-                        $media_url = $tweet->entities->media[0]->media_url;
-                        $media_url_https = $tweet->entities->media[0]->media_url_https;
+                        $media_url = $tweet['media_url'];
+                        $media_url_https = $tweet['media_url_https'];
                         if (!$media_url_https) {
                             $media_url_https = "Unknown";
                         }
@@ -257,12 +262,18 @@ function addtoTweetDB($db,$twitter, $tweet, $hashtag) {
                             "insert into media (user_image,time_now, source_id, created_at, user_id, name, screen_name, user_location, text, media_url, media_url_https, source, type, hashtag, post_url) ".
                             "values('$twitter_profile_image', '$time_now', '$twitter_id', '$created_at','$user_id','$this_name','$screen_name', '$user_location', '$text', '$media_url', '$media_url_https', 'twitter', '$type', '$hashtag', '$link_post')")){}
                     }
-                }
+
+
+
 
 
 
 
     mysqli_close($db_con);
+
+                    echo "DB succesfully updated";
+
+
 
 
 
@@ -287,7 +298,7 @@ function updateTwitter($twitter, $hashtag){
                 'include_entities' => true,
                 'lang' => 'en',
                 'count' => 10,
-                'rpp' => 1000,
+                'rpp' => 10,
             )
         );
     }
@@ -296,7 +307,7 @@ function updateTwitter($twitter, $hashtag){
 
         $content['twitter'] = $connection->get(
             "search/tweets", array(
-                'q' => '#'.$hashtag.' filter:images',
+                'q' => '#'.$hashtag. 'filter:images',
                 //'since_id' => $twitter['last_id'],
                 'include_entities' => true,
                 'lang' => 'ar',
@@ -313,15 +324,102 @@ function updateTwitter($twitter, $hashtag){
         if (isset($media->statuses)){
             foreach($media->statuses as $tweet){
                 if (/*$tweet->id > $twitter['last_id'] && */(!empty($tweet->entities->urls) || isset($tweet->entities->media))){
-                    array_push($twitter_output,$tweet);
+
+                    $tweety = (object) array();
+                    $twitter_id = $tweet->id;
+                    $tweety->id = $twitter_id;
+                    if(!$tweet->id){
+                        $tweety->id = null;
+                    }
+
+                    $tweet_id = $tweet->id_str;
+                    $tweety->id_str = $tweet->id_str;
+
+                    if(!$tweet->id_str){
+                        $tweety->id_str = null;
+
+                    }
+
+                    $created_at = $tweet->created_at;
+                    $tweety->created_at = $created_at;
+                    if(!$created_at){
+                        $tweety->created_at = null;
+
+                    }
+
+                    $user_id = $tweet->user->id;
+                    $tweety->user->id = $user_id;
+                    if(!$user_id){
+                        $tweety->user->id = null;
+
+                    }
+
+                    $twitter_profile_image = $tweet->user->profile_image_url;
+                    $tweety->user->profile_image_url = $tweet->user->profile_image_url;
+
+                    if(!$twitter_profile_image){
+                        $tweety->user->profile_image_url = null;
+
+                    }
+                    $this_name = $tweet->user->name;
+                    $tweety->user->name = $this_name;
+                    if(!$tweet->user->name){
+                        $tweety->user->name = null;
+
+                    }
+
+                    $screen_name =  $tweet->user->screen_name;
+                    $tweety->user->screen_name =  $screen_name ;
+                    if(!$screen_name){
+                        $tweety->user->screen_name = null;
+
+                    }
+                    $user_location = $tweet->user->location;
+                    $tweety->user->location =$user_location;
+                    if(!$tweet->user->location){
+                        $tweety->user->location = "Unknown";
+
+                    }
+
+                    $text = $tweet->text;
+                    $tweety->text = $text;
+                    if(!$text){
+                        $tweety->text  = null;
+
+                    }
+
+                    $link_post = 'https://twitter.com/'.$screen_name.'/status/'.$tweet_id;
+
+
+                    $time_now = time();
+                    if(!$twitter_id ||  !$user_id || !$twitter_profile_image || !$this_name || !$screen_name || !$user_location || !$text || !$link_post) {
+                       // var_dump("missing data");
+                    }
+                    $is_vine = false;
+                    $tweety->is_tweet = false;
+                    $type = 'photo';
+                    if (isset($tweet->entities->media)){
+                        $tweety->is_tweet = true;
+                        $media_url = $tweet->entities->media[0]->media_url;
+                        $media_url_https = $tweet->entities->media[0]->media_url_https;
+                        $tweety->media_url = $media_url;
+                        $tweety->media_url_https = $media_url_https;
+                        if (!$media_url_https) {
+                            $tweety->media_url_https = "Unknown";
+                        }
+                    }
+
+                    array_push($twitter_output,$tweety);
 
 
 
                 }
             }
+            echo json_encode($twitter_output);
         }
     }
-    echo json_encode($twitter_output);
+
+
 
 }
 
@@ -370,9 +468,7 @@ function updateInstagram($hashtag){
             $media_url_https= '';
         }
 
-       // if (mysqli_query($db_con,
-         //   "insert into media (user_image,time_now, source_id, created_at, user_id, name, screen_name, text, likes, media_url, media_url_https, source, type, hashtag, post_url) ".
-          //  "values('$user_image','$time_now', '$source_id', '$created_at','$user_id','$this_name','$screen_name', '$text', '$likes', '$media_url', '$media_url_https', 'instagram', '$type', '$hashtag', '$post_link')")){}
+
         array_push($instaoutput,json_encode($insta));
     }
 
