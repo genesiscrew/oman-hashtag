@@ -124,14 +124,6 @@ $(document).ready(function(){
     console.log("we are here now");
 
 
-
-
-    setTimeout(function(){
-        $( "<p>Test</p>" ).insertAfter( ".feed-item" );
-    },6000);
-
-
-
   
 
     $(document).on('click','.addDB',function(){
@@ -163,6 +155,8 @@ $(document).ready(function(){
     });
 
     $("#taghash").click(function() {
+
+        $(".twitter-feed").remove();
         data = $("#hashtag").val();
         $.ajax({
             dataType : "json",
@@ -181,7 +175,7 @@ $(document).ready(function(){
 
                 for (var e = 0; e < myArray.length; e+= rowLength) {
 
-                    $( ".container").append( "<div class=\"row\" id=\"row"+rowCounter+"\"></div>" );
+                    $( ".container").append( "<div class=\"row twitter-feed\" id=\"row"+rowCounter+"\"></div>" );
                     rowCounter++;
 
 
