@@ -17,8 +17,8 @@ function addToDB(selection,data) {
     console.log(selection);
 
     $.ajax({
-        url: "ajax-feed.php?hashtag=" + data + '&function=DB',
-        headers : {'Content-Type':'application/test'},
+        url: "ajax-feed.php?hashtag=" + data + '&function=addDB',
+        headers : {'Content-Type':'application/json'},
         dataType:'text',
         type: 'post',
         success: function (data) {
@@ -30,6 +30,29 @@ function addToDB(selection,data) {
         alert("Status: " + textStatus);
         alert("Error: " + errorThrown);
     }
+
+    })
+
+
+}
+
+function deleteFromDB(selection,source_id) {
+
+
+    console.log("about to delete data");
+    console.log(selection);
+
+    $.ajax({
+        url: "ajax-feed.php?source_id=" + source_id + '&function=deleteFromDB',
+        success: function (data) {
+            console.log("we are here");
+            console.log(data);
+        },
+        data: selection,
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            alert("Status: " + textStatus);
+            alert("Error: " + errorThrown);
+        }
 
     })
 
@@ -117,6 +140,22 @@ $(document).ready(function(){
         var tmp = myArray[$(this).attr('id').split("-")[1]];
 
        addToDB(tmp,data);
+
+
+
+
+    });
+
+
+    $(document).on('click','.deleteDB',function(){
+        //
+        console.log($(this).attr('id'));
+        var tmp = myArray[$(this).attr('id').split("-")[1]];
+        console.log(tmp);
+        var input =  myArray[$(this).attr('id').split("-")[1]].id;
+        console.log("we us heres");
+
+        deleteFromDB(tmp,input);
 
 
 
@@ -221,6 +260,7 @@ function setTweet(id, tweet,row,data) {
 		<img class="author" src="' + tweet.user.profile_picture + '" alt="" align="left" />\
 		<span class="name"><a href="http://twitter.com/' +
         tweet.user.name + '">@' + tweet.user.name + '</a></span>\
+        \<button class="btn-success deleteDB" id="deleteDB-'+id+'"> Delete from DB</button>\
         \<button class="btn-success addDB" id="addDB-'+id+'">\n' +
         '\t\t\t\t\tAdd to DB\n' +
         '\t\t\t\t</button>\

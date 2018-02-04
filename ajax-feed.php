@@ -31,7 +31,7 @@ if(isset($_GET['function'])) {
         updateTwitter($twitter, $_GET['hashtag']);
     }elseif($_GET['function'] == 'date') {
         // do date stuff
-    } elseif($_GET['function'] == 'DB') {
+    } elseif($_GET['function'] == 'addDB') {
         // do date stuff
         if(file_get_contents("php://input")){
             //$json = json_decode(file_get_contents("php://input"),TRUE);
@@ -45,6 +45,9 @@ if(isset($_GET['function'])) {
             //$db,$twitter, $tweet, $hashtag
         }
 
+    } elseif($_GET['function'] == 'deleteFromDB') {
+        // do date stuff
+        deletefromDB($db,$_GET['source_id']);
     }
 }
 
@@ -281,6 +284,23 @@ function addtoTweetDB($db,$twitter, $tweet, $hashtag) {
 
 }
 
+function deletefromDB($db,$tweet_id) {
+
+    $db_con = mysqli_connect($db['host'], $db['user'], $db['password'], $db['name']);
+
+    if (mysqli_query($db_con,
+        "DELETE FROM media WHERE source_id='$tweet_id'")){}
+
+
+    mysqli_close($db_con);
+
+    echo "DB succesfully updated";
+
+
+
+
+}
+
 function updateTwitter($twitter, $hashtag){
 
 
@@ -297,8 +317,8 @@ function updateTwitter($twitter, $hashtag){
                 //'since_id' => $twitter['last_id'],
                 'include_entities' => true,
                 'lang' => 'en',
-                'count' => 10,
-                'rpp' => 10,
+                'count' => 100,
+                'rpp' => 100,
             )
         );
     }
@@ -311,8 +331,8 @@ function updateTwitter($twitter, $hashtag){
                 //'since_id' => $twitter['last_id'],
                 'include_entities' => true,
                 'lang' => 'ar',
-                'count' => 10,
-                'rpp' => 10,
+                'count' => 100,
+                'rpp' => 100,
             )
         );
 
